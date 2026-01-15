@@ -14,19 +14,18 @@
         }
 
         :root {
-            /* 多巴胺配色 - 明亮鲜艳的纯色 */
-            --primary-color: #FF6B6B;      /* 珊瑚红 */
+            --primary-color: #FF6B6B;
             --primary-dark: #EE5A5A;
-            --secondary-color: #4ECDC4;    /* 薄荷绿 */
-            --accent-color: #FFE66D;       /* 柠檬黄 */
-            --purple-color: #A66CFF;       /* 薰衣草紫 */
-            --orange-color: #FF9F43;       /* 芒果橙 */
-            --pink-color: #FF85A2;         /* 樱花粉 */
-            --blue-color: #54A0FF;         /* 天空蓝 */
+            --secondary-color: #4ECDC4;
+            --accent-color: #FFE66D;
+            --purple-color: #A66CFF;
+            --orange-color: #FF9F43;
+            --pink-color: #FF85A2;
+            --blue-color: #54A0FF;
             --danger-color: #FF6B6B;
             --warning-color: #FF9F43;
             --info-color: #54A0FF;
-            --bg-color: #FFF9F0;           /* 奶油白背景 */
+            --bg-color: #FFF9F0;
             --card-bg: #ffffff;
             --text-primary: #2D3436;
             --text-secondary: #636E72;
@@ -42,23 +41,45 @@
             padding-top: 10px;
         }
 
-        /* 页面容器 */
-        .page {
-            display: none;
-            padding: 15px;
-            animation: fadeIn 0.3s ease;
+        .sync-status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
-        .page.active {
-            display: block;
+        .sync-status.syncing { background: #FFF3E0; color: var(--orange-color); }
+        .sync-status.synced { background: #E8FFF5; color: var(--secondary-color); }
+        .sync-status.offline { background: #FFE8E8; color: var(--danger-color); }
+
+        .sync-status .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
         }
+
+        .sync-status.syncing .dot { animation: pulse 1s infinite; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .page { display: none; padding: 15px; animation: fadeIn 0.3s ease; }
+        .page.active { display: block; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 积分显示卡片 */
         .score-card {
             background: var(--purple-color);
             color: white;
@@ -69,23 +90,10 @@
             box-shadow: 0 6px 20px rgba(166, 108, 255, 0.3);
         }
 
-        .score-card .label {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 5px;
-        }
+        .score-card .label { font-size: 14px; opacity: 0.9; margin-bottom: 5px; }
+        .score-card .score { font-size: 48px; font-weight: bold; }
+        .score-card .unit { font-size: 18px; opacity: 0.9; }
 
-        .score-card .score {
-            font-size: 48px;
-            font-weight: bold;
-        }
-
-        .score-card .unit {
-            font-size: 18px;
-            opacity: 0.9;
-        }
-
-        /* 卡片样式 */
         .card {
             background: var(--card-bg);
             border-radius: 16px;
@@ -103,14 +111,9 @@
             justify-content: space-between;
         }
 
-        .card-title .icon {
-            margin-right: 8px;
-        }
+        .card-title .icon { margin-right: 8px; }
 
-        /* 任务列表 */
-        .task-list {
-            list-style: none;
-        }
+        .task-list { list-style: none; }
 
         .task-item {
             display: flex;
@@ -119,9 +122,7 @@
             border-bottom: 1px solid var(--border-color);
         }
 
-        .task-item:last-child {
-            border-bottom: none;
-        }
+        .task-item:last-child { border-bottom: none; }
 
         .task-checkbox {
             width: 26px;
@@ -149,36 +150,14 @@
             font-weight: bold;
         }
 
-        .task-info {
-            flex: 1;
-        }
+        .task-info { flex: 1; }
+        .task-name { font-size: 15px; margin-bottom: 2px; }
+        .task-item.completed .task-name { text-decoration: line-through; color: var(--text-secondary); }
 
-        .task-name {
-            font-size: 15px;
-            margin-bottom: 2px;
-        }
+        .task-score { font-size: 14px; font-weight: 600; color: var(--secondary-color); margin-left: 10px; }
+        .task-score.negative { color: var(--danger-color); }
 
-        .task-item.completed .task-name {
-            text-decoration: line-through;
-            color: var(--text-secondary);
-        }
-
-        .task-score {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--secondary-color);
-            margin-left: 10px;
-        }
-
-        .task-score.negative {
-            color: var(--danger-color);
-        }
-
-        .task-actions {
-            display: flex;
-            gap: 8px;
-            margin-left: 10px;
-        }
+        .task-actions { display: flex; gap: 8px; margin-left: 10px; }
 
         .task-action-btn {
             width: 32px;
@@ -192,17 +171,9 @@
             justify-content: center;
         }
 
-        .task-action-btn.edit {
-            background: #E8F4FF;
-            color: var(--blue-color);
-        }
+        .task-action-btn.edit { background: #E8F4FF; color: var(--blue-color); }
+        .task-action-btn.delete { background: #FFE8E8; color: var(--danger-color); }
 
-        .task-action-btn.delete {
-            background: #FFE8E8;
-            color: var(--danger-color);
-        }
-
-        /* 按钮样式 */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -216,31 +187,12 @@
             transition: all 0.2s;
         }
 
-        .btn-primary {
-            background: var(--primary-color);
-            color: white;
-        }
+        .btn-primary { background: var(--primary-color); color: white; }
+        .btn-primary:active { background: var(--primary-dark); transform: scale(0.98); }
+        .btn-danger { background: var(--danger-color); color: white; }
+        .btn-block { width: 100%; }
+        .btn-sm { padding: 8px 16px; font-size: 14px; }
 
-        .btn-primary:active {
-            background: var(--primary-dark);
-            transform: scale(0.98);
-        }
-
-        .btn-danger {
-            background: var(--danger-color);
-            color: white;
-        }
-
-        .btn-block {
-            width: 100%;
-        }
-
-        .btn-sm {
-            padding: 8px 16px;
-            font-size: 14px;
-        }
-
-        /* 添加按钮 */
         .add-btn {
             width: 36px;
             height: 36px;
@@ -255,10 +207,7 @@
             justify-content: center;
         }
 
-        /* 奖励分类 */
-        .reward-category {
-            margin-bottom: 20px;
-        }
+        .reward-category { margin-bottom: 20px; }
 
         .category-header {
             display: flex;
@@ -269,17 +218,8 @@
             margin-bottom: 10px;
         }
 
-        .category-title {
-            font-size: 16px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-        }
-
-        .category-title .icon {
-            margin-right: 8px;
-            font-size: 20px;
-        }
+        .category-title { font-size: 16px; font-weight: 600; display: flex; align-items: center; }
+        .category-title .icon { margin-right: 8px; font-size: 20px; }
 
         .reward-item {
             display: flex;
@@ -292,25 +232,10 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
-        .reward-info {
-            flex: 1;
-        }
-
-        .reward-name {
-            font-size: 15px;
-            font-weight: 500;
-        }
-
-        .reward-cost {
-            font-size: 14px;
-            color: var(--orange-color);
-            font-weight: 600;
-        }
-
-        .reward-actions {
-            display: flex;
-            gap: 8px;
-        }
+        .reward-info { flex: 1; }
+        .reward-name { font-size: 15px; font-weight: 500; }
+        .reward-cost { font-size: 14px; color: var(--orange-color); font-weight: 600; }
+        .reward-actions { display: flex; gap: 8px; }
 
         .exchange-btn {
             padding: 8px 16px;
@@ -322,12 +247,8 @@
             cursor: pointer;
         }
 
-        .exchange-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
+        .exchange-btn:disabled { background: #ccc; cursor: not-allowed; }
 
-        /* 明细列表 */
         .history-item {
             display: flex;
             align-items: center;
@@ -349,44 +270,16 @@
             font-size: 18px;
         }
 
-        .history-icon.income {
-            background: #E8FFF5;
-            color: var(--secondary-color);
-        }
+        .history-icon.income { background: #E8FFF5; color: var(--secondary-color); }
+        .history-icon.expense { background: #FFE8E8; color: var(--danger-color); }
 
-        .history-icon.expense {
-            background: #FFE8E8;
-            color: var(--danger-color);
-        }
+        .history-info { flex: 1; }
+        .history-desc { font-size: 15px; margin-bottom: 2px; }
+        .history-time { font-size: 12px; color: var(--text-secondary); }
+        .history-score { font-size: 16px; font-weight: 600; }
+        .history-score.positive { color: var(--secondary-color); }
+        .history-score.negative { color: var(--danger-color); }
 
-        .history-info {
-            flex: 1;
-        }
-
-        .history-desc {
-            font-size: 15px;
-            margin-bottom: 2px;
-        }
-
-        .history-time {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .history-score {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .history-score.positive {
-            color: var(--secondary-color);
-        }
-
-        .history-score.negative {
-            color: var(--danger-color);
-        }
-
-        /* 底部导航 */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -411,25 +304,15 @@
             transition: color 0.2s;
         }
 
-        .nav-item.active {
-            color: var(--primary-color);
-        }
-
+        .nav-item.active { color: var(--primary-color); }
         .nav-item:nth-child(1).active { color: var(--primary-color); }
         .nav-item:nth-child(2).active { color: var(--orange-color); }
         .nav-item:nth-child(3).active { color: var(--pink-color); }
         .nav-item:nth-child(4).active { color: var(--blue-color); }
 
-        .nav-item .icon {
-            font-size: 24px;
-            margin-bottom: 2px;
-        }
+        .nav-item .icon { font-size: 24px; margin-bottom: 2px; }
+        .nav-item .label { font-size: 12px; }
 
-        .nav-item .label {
-            font-size: 12px;
-        }
-
-        /* 模态框 */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -444,9 +327,7 @@
             padding: 20px;
         }
 
-        .modal-overlay.active {
-            display: flex;
-        }
+        .modal-overlay.active { display: flex; }
 
         .modal {
             background: var(--card-bg);
@@ -471,10 +352,7 @@
             justify-content: space-between;
         }
 
-        .modal-title {
-            font-size: 18px;
-            font-weight: 600;
-        }
+        .modal-title { font-size: 18px; font-weight: 600; }
 
         .modal-close {
             width: 32px;
@@ -486,9 +364,7 @@
             color: var(--text-secondary);
         }
 
-        .modal-body {
-            padding: 20px;
-        }
+        .modal-body { padding: 20px; }
 
         .modal-footer {
             padding: 15px 20px;
@@ -497,18 +373,8 @@
             gap: 10px;
         }
 
-        /* 表单样式 */
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 6px;
-            color: var(--text-secondary);
-        }
+        .form-group { margin-bottom: 15px; }
+        .form-label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 6px; color: var(--text-secondary); }
 
         .form-input {
             width: 100%;
@@ -519,10 +385,7 @@
             transition: border-color 0.2s;
         }
 
-        .form-input:focus {
-            outline: none;
-            border-color: var(--purple-color);
-        }
+        .form-input:focus { outline: none; border-color: var(--purple-color); }
 
         .form-select {
             width: 100%;
@@ -533,7 +396,6 @@
             background: white;
         }
 
-        /* 标签页 */
         .tabs {
             display: flex;
             background: var(--card-bg);
@@ -552,24 +414,11 @@
             transition: all 0.2s;
         }
 
-        .tab.active {
-            background: var(--orange-color);
-            color: white;
-        }
+        .tab.active { background: var(--orange-color); color: white; }
 
-        /* 空状态 */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-secondary);
-        }
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-secondary); }
+        .empty-state .icon { font-size: 48px; margin-bottom: 10px; }
 
-        .empty-state .icon {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-
-        /* 快捷操作按钮 */
         .quick-actions {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -590,66 +439,63 @@
             font-weight: 500;
         }
 
-        .quick-btn .icon {
-            font-size: 28px;
+        .quick-btn .icon { font-size: 28px; }
+        .quick-btn.add-task { background: #FFE8E8; color: var(--primary-color); }
+        .quick-btn.add-reward { background: #FFF4E5; color: var(--orange-color); }
+        .quick-btn.manual-adjust { background: #E8FFF5; color: var(--secondary-color); }
+        .quick-btn.view-history { background: #F0E8FF; color: var(--purple-color); }
+
+        .date-group { margin-bottom: 20px; }
+        .date-header { font-size: 14px; color: var(--text-secondary); padding: 10px 0; font-weight: 500; }
+
+        .confirm-content { text-align: center; padding: 20px 0; }
+        .confirm-icon { font-size: 48px; margin-bottom: 15px; }
+        .confirm-message { font-size: 16px; color: var(--text-primary); }
+        .confirm-sub { font-size: 14px; color: var(--text-secondary); margin-top: 8px; }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 300;
         }
 
-        .quick-btn.add-task {
-            background: #FFE8E8;
-            color: var(--primary-color);
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border-color);
+            border-top-color: var(--purple-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
-        .quick-btn.add-reward {
-            background: #FFF4E5;
-            color: var(--orange-color);
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
-        .quick-btn.manual-adjust {
-            background: #E8FFF5;
-            color: var(--secondary-color);
-        }
-
-        .quick-btn.view-history {
-            background: #F0E8FF;
-            color: var(--purple-color);
-        }
-
-        /* 日期分组 */
-        .date-group {
-            margin-bottom: 20px;
-        }
-
-        .date-header {
-            font-size: 14px;
-            color: var(--text-secondary);
-            padding: 10px 0;
-            font-weight: 500;
-        }
-
-        /* 确认对话框 */
-        .confirm-content {
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        .confirm-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
-        }
-
-        .confirm-message {
-            font-size: 16px;
-            color: var(--text-primary);
-        }
-
-        .confirm-sub {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-top: 8px;
-        }
+        .loading-text { margin-top: 15px; color: var(--text-secondary); }
     </style>
 </head>
 <body>
+    <!-- 同步状态 -->
+    <div class="sync-status synced" id="sync-status">
+        <span class="dot"></span>
+        <span id="sync-text">已同步</span>
+    </div>
+
+    <!-- 加载中 -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">加载中...</div>
+    </div>
+
     <!-- 首页 -->
     <div id="page-home" class="page active">
         <div class="score-card">
@@ -663,9 +509,7 @@
                 <span><span class="icon">📋</span>今日任务</span>
                 <span id="today-progress">0/0</span>
             </div>
-            <ul class="task-list" id="today-tasks">
-                <!-- 今日任务列表 -->
-            </ul>
+            <ul class="task-list" id="today-tasks"></ul>
             <div class="empty-state" id="today-empty" style="display: none;">
                 <div class="icon">📝</div>
                 <div>暂无今日任务</div>
@@ -705,9 +549,7 @@
                     <span><span class="icon">🔄</span>日常任务</span>
                     <button class="add-btn" onclick="showAddTaskModal('daily')">+</button>
                 </div>
-                <ul class="task-list" id="daily-tasks-list">
-                    <!-- 日常任务列表 -->
-                </ul>
+                <ul class="task-list" id="daily-tasks-list"></ul>
                 <div class="empty-state" id="daily-empty" style="display: none;">
                     <div class="icon">📝</div>
                     <div>暂无日常任务</div>
@@ -724,9 +566,7 @@
                     <span><span class="icon">📌</span>临时任务</span>
                     <button class="add-btn" onclick="showAddTaskModal('temp')">+</button>
                 </div>
-                <ul class="task-list" id="temp-tasks-list">
-                    <!-- 临时任务列表 -->
-                </ul>
+                <ul class="task-list" id="temp-tasks-list"></ul>
                 <div class="empty-state" id="temp-empty" style="display: none;">
                     <div class="icon">📝</div>
                     <div>暂无临时任务</div>
@@ -745,9 +585,7 @@
             <div class="score" style="font-size: 36px;" id="available-score">0</div>
         </div>
 
-        <div id="rewards-container">
-            <!-- 奖励分类列表 -->
-        </div>
+        <div id="rewards-container"></div>
 
         <button class="btn btn-primary btn-block" onclick="showAddRewardModal()" style="margin-top: 15px; background: var(--pink-color);">
             ➕ 添加新奖励
@@ -767,9 +605,7 @@
             </div>
         </div>
 
-        <div id="history-container">
-            <!-- 历史记录列表 -->
-        </div>
+        <div id="history-container"></div>
 
         <div class="empty-state" id="history-empty" style="display: none;">
             <div class="icon">📊</div>
@@ -852,9 +688,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">奖励分类</label>
-                    <select class="form-select" id="reward-category">
-                        <!-- 动态填充分类 -->
-                    </select>
+                    <select class="form-select" id="reward-category"></select>
                 </div>
             </div>
             <div class="modal-footer">
@@ -903,9 +737,7 @@
                 <button class="modal-close" onclick="closeModal('category-modal')">&times;</button>
             </div>
             <div class="modal-body">
-                <div id="category-list">
-                    <!-- 分类列表 -->
-                </div>
+                <div id="category-list"></div>
                 <div class="form-group" style="margin-top: 15px;">
                     <label class="form-label">添加新分类</label>
                     <div style="display: flex; gap: 10px;">
@@ -938,9 +770,28 @@
         </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
     <script>
-        // ==================== 数据管理 ====================
-        
+        // Firebase 配置
+        const firebaseConfig = {
+            apiKey: "AIzaSyD-jjoYsx2ZNvCAWFPgDSkID9Zht6LW9a0",
+            authDomain: "habit-bank-bc9c7.firebaseapp.com",
+            projectId: "habit-bank-bc9c7",
+            storageBucket: "habit-bank-bc9c7.firebasestorage.app",
+            messagingSenderId: "58240535432",
+            appId: "1:58240535432:web:1e0115f6fc464ad702483d"
+        };
+
+        // 初始化 Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // 数据文档ID（用于标识这个应用的数据）
+        const DATA_DOC_ID = 'main';
+
         // 默认分类
         const defaultCategories = [
             { id: 'game', name: '游戏娱乐', icon: '🎮' },
@@ -950,42 +801,82 @@
             { id: 'other', name: '其他', icon: '🎯' }
         ];
 
-        // 初始化数据
-        function initData() {
-            if (!localStorage.getItem('categories')) {
-                localStorage.setItem('categories', JSON.stringify(defaultCategories));
+        // 应用数据
+        let appData = {
+            score: 0,
+            tasks: [],
+            rewards: [],
+            categories: defaultCategories,
+            history: [],
+            taskCompletions: {}
+        };
+
+        // 同步状态
+        let isSyncing = false;
+
+        // 更新同步状态显示
+        function updateSyncStatus(status, text) {
+            const statusEl = document.getElementById('sync-status');
+            const textEl = document.getElementById('sync-text');
+            statusEl.className = 'sync-status ' + status;
+            textEl.textContent = text;
+        }
+
+        // 保存数据到 Firebase
+        async function saveToCloud() {
+            if (isSyncing) return;
+            isSyncing = true;
+            updateSyncStatus('syncing', '同步中...');
+
+            try {
+                await db.collection('scoreApp').doc(DATA_DOC_ID).set(appData);
+                updateSyncStatus('synced', '已同步');
+            } catch (error) {
+                console.error('保存失败:', error);
+                updateSyncStatus('offline', '同步失败');
             }
-            if (!localStorage.getItem('tasks')) {
-                localStorage.setItem('tasks', JSON.stringify([]));
-            }
-            if (!localStorage.getItem('rewards')) {
-                localStorage.setItem('rewards', JSON.stringify([]));
-            }
-            if (!localStorage.getItem('history')) {
-                localStorage.setItem('history', JSON.stringify([]));
-            }
-            if (!localStorage.getItem('score')) {
-                localStorage.setItem('score', '0');
-            }
-            if (!localStorage.getItem('taskCompletions')) {
-                localStorage.setItem('taskCompletions', JSON.stringify({}));
+
+            isSyncing = false;
+        }
+
+        // 从 Firebase 加载数据
+        async function loadFromCloud() {
+            try {
+                const doc = await db.collection('scoreApp').doc(DATA_DOC_ID).get();
+                if (doc.exists) {
+                    appData = { ...appData, ...doc.data() };
+                } else {
+                    // 首次使用，创建默认数据
+                    await saveToCloud();
+                }
+                updateSyncStatus('synced', '已同步');
+            } catch (error) {
+                console.error('加载失败:', error);
+                updateSyncStatus('offline', '离线模式');
             }
         }
 
-        // 获取数据
-        function getData(key) {
-            const data = localStorage.getItem(key);
-            if (key === 'score') return parseInt(data) || 0;
-            return JSON.parse(data) || [];
+        // 监听实时更新
+        function listenToChanges() {
+            db.collection('scoreApp').doc(DATA_DOC_ID).onSnapshot((doc) => {
+                if (doc.exists && !isSyncing) {
+                    appData = { ...appData, ...doc.data() };
+                    refreshAllPages();
+                    updateSyncStatus('synced', '已同步');
+                }
+            }, (error) => {
+                console.error('监听失败:', error);
+                updateSyncStatus('offline', '连接断开');
+            });
         }
 
-        // 保存数据
-        function saveData(key, data) {
-            if (key === 'score') {
-                localStorage.setItem(key, data.toString());
-            } else {
-                localStorage.setItem(key, JSON.stringify(data));
-            }
+        // 刷新所有页面
+        function refreshAllPages() {
+            updateScoreDisplay();
+            renderTodayTasks();
+            renderTasksList();
+            renderRewards();
+            renderHistory();
         }
 
         // 生成唯一ID
@@ -1004,9 +895,8 @@
             const now = new Date();
             const today = getTodayStr();
             const dateStr = date.toISOString().split('T')[0];
-            
             const timeStr = date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
-            
+
             if (dateStr === today) {
                 return '今天 ' + timeStr;
             } else if (dateStr === new Date(now - 86400000).toISOString().split('T')[0]) {
@@ -1016,55 +906,34 @@
             }
         }
 
-        // ==================== 页面切换 ====================
-        
+        // 页面切换
         function switchPage(pageName) {
-            // 隐藏所有页面
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-            
-            // 显示目标页面
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById('page-' + pageName).classList.add('active');
-            
-            // 更新导航状态
+
             document.querySelectorAll('.nav-item').forEach((item, index) => {
                 item.classList.remove('active');
                 const pages = ['home', 'tasks', 'rewards', 'history'];
-                if (pages[index] === pageName) {
-                    item.classList.add('active');
-                }
+                if (pages[index] === pageName) item.classList.add('active');
             });
-            
-            // 刷新页面数据
+
             refreshPage(pageName);
         }
 
         function refreshPage(pageName) {
             switch(pageName) {
-                case 'home':
-                    renderTodayTasks();
-                    updateScoreDisplay();
-                    break;
-                case 'tasks':
-                    renderTasksList();
-                    break;
-                case 'rewards':
-                    renderRewards();
-                    updateScoreDisplay();
-                    break;
-                case 'history':
-                    renderHistory();
-                    break;
+                case 'home': renderTodayTasks(); updateScoreDisplay(); break;
+                case 'tasks': renderTasksList(); break;
+                case 'rewards': renderRewards(); updateScoreDisplay(); break;
+                case 'history': renderHistory(); break;
             }
         }
 
-        // ==================== 任务管理 ====================
-        
+        // 任务标签切换
         function switchTaskTab(tab) {
             document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
-            
+
             if (tab === 'daily') {
                 document.getElementById('daily-tasks-section').style.display = 'block';
                 document.getElementById('temp-tasks-section').style.display = 'none';
@@ -1074,35 +943,33 @@
             }
         }
 
+        // 渲染今日任务
         function renderTodayTasks() {
-            const tasks = getData('tasks');
-            const completions = getData('taskCompletions');
             const today = getTodayStr();
-            
-            // 获取今日任务（日常任务 + 今天创建的临时任务）
-            const todayTasks = tasks.filter(task => {
+            const todayTasks = appData.tasks.filter(task => {
                 if (task.type === 'daily') return true;
                 if (task.type === 'temp' && task.createdDate === today) return true;
                 return false;
             });
-            
+
             const container = document.getElementById('today-tasks');
             const emptyState = document.getElementById('today-empty');
-            
+
             if (todayTasks.length === 0) {
                 container.innerHTML = '';
                 emptyState.style.display = 'block';
                 document.getElementById('today-progress').textContent = '0/0';
                 return;
             }
-            
+
             emptyState.style.display = 'none';
-            
             let completedCount = 0;
+
             container.innerHTML = todayTasks.map(task => {
+                const completions = appData.taskCompletions || {};
                 const isCompleted = completions[today] && completions[today][task.id];
                 if (isCompleted) completedCount++;
-                
+
                 return `
                     <li class="task-item ${isCompleted ? 'completed' : ''}">
                         <div class="task-checkbox ${isCompleted ? 'completed' : ''}" 
@@ -1114,20 +981,20 @@
                     </li>
                 `;
             }).join('');
-            
+
             document.getElementById('today-progress').textContent = `${completedCount}/${todayTasks.length}`;
         }
 
+        // 渲染任务列表
         function renderTasksList() {
-            const tasks = getData('tasks');
-            const completions = getData('taskCompletions');
             const today = getTodayStr();
-            
+            const completions = appData.taskCompletions || {};
+
             // 日常任务
-            const dailyTasks = tasks.filter(t => t.type === 'daily');
+            const dailyTasks = appData.tasks.filter(t => t.type === 'daily');
             const dailyContainer = document.getElementById('daily-tasks-list');
             const dailyEmpty = document.getElementById('daily-empty');
-            
+
             if (dailyTasks.length === 0) {
                 dailyContainer.innerHTML = '';
                 dailyEmpty.style.display = 'block';
@@ -1151,12 +1018,12 @@
                     `;
                 }).join('');
             }
-            
+
             // 临时任务
-            const tempTasks = tasks.filter(t => t.type === 'temp');
+            const tempTasks = appData.tasks.filter(t => t.type === 'temp');
             const tempContainer = document.getElementById('temp-tasks-list');
             const tempEmpty = document.getElementById('temp-empty');
-            
+
             if (tempTasks.length === 0) {
                 tempContainer.innerHTML = '';
                 tempEmpty.style.display = 'block';
@@ -1182,32 +1049,23 @@
             }
         }
 
-        function toggleTaskCompletion(taskId) {
-            const tasks = getData('tasks');
-            const task = tasks.find(t => t.id === taskId);
+        // 切换任务完成状态
+        async function toggleTaskCompletion(taskId) {
+            const task = appData.tasks.find(t => t.id === taskId);
             if (!task) return;
-            
-            const completions = getData('taskCompletions');
+
             const today = getTodayStr();
             const dateKey = task.type === 'daily' ? today : task.createdDate;
-            
-            if (!completions[dateKey]) {
-                completions[dateKey] = {};
-            }
-            
-            const wasCompleted = completions[dateKey][taskId];
-            completions[dateKey][taskId] = !wasCompleted;
-            
-            saveData('taskCompletions', completions);
-            
-            // 更新积分
-            let score = getData('score');
-            const history = getData('history');
-            
+
+            if (!appData.taskCompletions) appData.taskCompletions = {};
+            if (!appData.taskCompletions[dateKey]) appData.taskCompletions[dateKey] = {};
+
+            const wasCompleted = appData.taskCompletions[dateKey][taskId];
+            appData.taskCompletions[dateKey][taskId] = !wasCompleted;
+
             if (!wasCompleted) {
-                // 完成任务，加分
-                score += task.score;
-                history.unshift({
+                appData.score += task.score;
+                appData.history.unshift({
                     id: generateId(),
                     type: 'task_complete',
                     description: `完成任务: ${task.name}`,
@@ -1215,9 +1073,8 @@
                     timestamp: Date.now()
                 });
             } else {
-                // 取消完成，扣回分数
-                score -= task.score;
-                history.unshift({
+                appData.score -= task.score;
+                appData.history.unshift({
                     id: generateId(),
                     type: 'task_cancel',
                     description: `取消完成: ${task.name}`,
@@ -1225,16 +1082,14 @@
                     timestamp: Date.now()
                 });
             }
-            
-            saveData('score', score);
-            saveData('history', history);
-            
-            // 刷新显示
+
+            await saveToCloud();
             renderTodayTasks();
             renderTasksList();
             updateScoreDisplay();
         }
 
+        // 显示添加任务模态框
         function showAddTaskModal(type = 'daily') {
             document.getElementById('task-modal-title').textContent = '添加任务';
             document.getElementById('task-edit-id').value = '';
@@ -1245,11 +1100,11 @@
             openModal('task-modal');
         }
 
+        // 编辑任务
         function editTask(taskId) {
-            const tasks = getData('tasks');
-            const task = tasks.find(t => t.id === taskId);
+            const task = appData.tasks.find(t => t.id === taskId);
             if (!task) return;
-            
+
             document.getElementById('task-modal-title').textContent = '编辑任务';
             document.getElementById('task-edit-id').value = task.id;
             document.getElementById('task-name').value = task.name;
@@ -1259,29 +1114,26 @@
             openModal('task-modal');
         }
 
-        function saveTask() {
+        // 保存任务
+        async function saveTask() {
             const editId = document.getElementById('task-edit-id').value;
             const name = document.getElementById('task-name').value.trim();
             const score = parseInt(document.getElementById('task-score').value) || 0;
             const penalty = parseInt(document.getElementById('task-penalty').value) || 0;
             const type = document.getElementById('task-type').value;
-            
+
             if (!name) {
                 alert('请输入任务名称');
                 return;
             }
-            
-            const tasks = getData('tasks');
-            
+
             if (editId) {
-                // 编辑现有任务
-                const index = tasks.findIndex(t => t.id === editId);
+                const index = appData.tasks.findIndex(t => t.id === editId);
                 if (index !== -1) {
-                    tasks[index] = { ...tasks[index], name, score, penalty, type };
+                    appData.tasks[index] = { ...appData.tasks[index], name, score, penalty, type };
                 }
             } else {
-                // 添加新任务
-                tasks.push({
+                appData.tasks.push({
                     id: generateId(),
                     name,
                     score,
@@ -1290,35 +1142,30 @@
                     createdDate: getTodayStr()
                 });
             }
-            
-            saveData('tasks', tasks);
+
+            await saveToCloud();
             closeModal('task-modal');
             renderTodayTasks();
             renderTasksList();
         }
 
+        // 删除任务
         function deleteTask(taskId) {
-            showConfirm('🗑️', '确认删除此任务？', '删除后无法恢复', () => {
-                const tasks = getData('tasks');
-                const newTasks = tasks.filter(t => t.id !== taskId);
-                saveData('tasks', newTasks);
+            showConfirm('🗑️', '确认删除此任务？', '删除后无法恢复', async () => {
+                appData.tasks = appData.tasks.filter(t => t.id !== taskId);
+                await saveToCloud();
                 renderTodayTasks();
                 renderTasksList();
             });
         }
 
-        // ==================== 奖励管理 ====================
-        
+        // 渲染奖励
         function renderRewards() {
-            const categories = getData('categories');
-            const rewards = getData('rewards');
-            const score = getData('score');
-            
-            document.getElementById('available-score').textContent = score;
-            
+            document.getElementById('available-score').textContent = appData.score;
+
             const container = document.getElementById('rewards-container');
-            
-            if (rewards.length === 0) {
+
+            if (appData.rewards.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
                         <div class="icon">🎁</div>
@@ -1330,11 +1177,11 @@
                 `;
                 return;
             }
-            
-            container.innerHTML = categories.map(category => {
-                const categoryRewards = rewards.filter(r => r.categoryId === category.id);
+
+            container.innerHTML = appData.categories.map(category => {
+                const categoryRewards = appData.rewards.filter(r => r.categoryId === category.id);
                 if (categoryRewards.length === 0) return '';
-                
+
                 return `
                     <div class="reward-category">
                         <div class="category-header">
@@ -1354,7 +1201,7 @@
                                     <button class="task-action-btn delete" onclick="deleteReward('${reward.id}')">🗑️</button>
                                     <button class="exchange-btn" 
                                             onclick="exchangeReward('${reward.id}')"
-                                            ${score < reward.cost ? 'disabled' : ''}>
+                                            ${appData.score < reward.cost ? 'disabled' : ''}>
                                         兑换
                                     </button>
                                 </div>
@@ -1365,124 +1212,114 @@
             }).join('');
         }
 
+        // 显示添加奖励模态框
         function showAddRewardModal() {
             document.getElementById('reward-modal-title').textContent = '添加奖励';
             document.getElementById('reward-edit-id').value = '';
             document.getElementById('reward-name').value = '';
             document.getElementById('reward-cost').value = '50';
-            
-            // 填充分类选项
-            const categories = getData('categories');
-            document.getElementById('reward-category').innerHTML = categories.map(c => 
+
+            document.getElementById('reward-category').innerHTML = appData.categories.map(c =>
                 `<option value="${c.id}">${c.icon} ${c.name}</option>`
             ).join('');
-            
+
             openModal('reward-modal');
         }
 
+        // 编辑奖励
         function editReward(rewardId) {
-            const rewards = getData('rewards');
-            const reward = rewards.find(r => r.id === rewardId);
+            const reward = appData.rewards.find(r => r.id === rewardId);
             if (!reward) return;
-            
+
             document.getElementById('reward-modal-title').textContent = '编辑奖励';
             document.getElementById('reward-edit-id').value = reward.id;
             document.getElementById('reward-name').value = reward.name;
             document.getElementById('reward-cost').value = reward.cost;
-            
-            // 填充分类选项
-            const categories = getData('categories');
-            document.getElementById('reward-category').innerHTML = categories.map(c => 
+
+            document.getElementById('reward-category').innerHTML = appData.categories.map(c =>
                 `<option value="${c.id}" ${c.id === reward.categoryId ? 'selected' : ''}>${c.icon} ${c.name}</option>`
             ).join('');
-            
+
             openModal('reward-modal');
         }
 
-        function saveReward() {
+        // 保存奖励
+        async function saveReward() {
             const editId = document.getElementById('reward-edit-id').value;
             const name = document.getElementById('reward-name').value.trim();
             const cost = parseInt(document.getElementById('reward-cost').value) || 0;
             const categoryId = document.getElementById('reward-category').value;
-            
+
             if (!name) {
                 alert('请输入奖励名称');
                 return;
             }
-            
-            const rewards = getData('rewards');
-            
+
             if (editId) {
-                const index = rewards.findIndex(r => r.id === editId);
+                const index = appData.rewards.findIndex(r => r.id === editId);
                 if (index !== -1) {
-                    rewards[index] = { ...rewards[index], name, cost, categoryId };
+                    appData.rewards[index] = { ...appData.rewards[index], name, cost, categoryId };
                 }
             } else {
-                rewards.push({
+                appData.rewards.push({
                     id: generateId(),
                     name,
                     cost,
                     categoryId
                 });
             }
-            
-            saveData('rewards', rewards);
+
+            await saveToCloud();
             closeModal('reward-modal');
             renderRewards();
         }
 
+        // 删除奖励
         function deleteReward(rewardId) {
-            showConfirm('🗑️', '确认删除此奖励？', '删除后无法恢复', () => {
-                const rewards = getData('rewards');
-                const newRewards = rewards.filter(r => r.id !== rewardId);
-                saveData('rewards', newRewards);
+            showConfirm('🗑️', '确认删除此奖励？', '删除后无法恢复', async () => {
+                appData.rewards = appData.rewards.filter(r => r.id !== rewardId);
+                await saveToCloud();
                 renderRewards();
             });
         }
 
+        // 兑换奖励
         function exchangeReward(rewardId) {
-            const rewards = getData('rewards');
-            const reward = rewards.find(r => r.id === rewardId);
+            const reward = appData.rewards.find(r => r.id === rewardId);
             if (!reward) return;
-            
-            const score = getData('score');
-            if (score < reward.cost) {
+
+            if (appData.score < reward.cost) {
                 alert('积分不足！');
                 return;
             }
-            
-            showConfirm('🎁', `确认兑换「${reward.name}」？`, `将扣除 ${reward.cost} 积分`, () => {
-                let newScore = score - reward.cost;
-                saveData('score', newScore);
-                
-                const history = getData('history');
-                history.unshift({
+
+            showConfirm('🎁', `确认兑换「${reward.name}」？`, `将扣除 ${reward.cost} 积分`, async () => {
+                appData.score -= reward.cost;
+                appData.history.unshift({
                     id: generateId(),
                     type: 'exchange',
                     description: `兑换奖励: ${reward.name}`,
                     amount: -reward.cost,
                     timestamp: Date.now()
                 });
-                saveData('history', history);
-                
+
+                await saveToCloud();
                 renderRewards();
                 updateScoreDisplay();
                 alert('兑换成功！🎉');
             });
         }
 
-        // ==================== 分类管理 ====================
-        
+        // 显示分类管理模态框
         function showAddCategoryModal() {
             renderCategoryList();
             openModal('category-modal');
         }
 
+        // 渲染分类列表
         function renderCategoryList() {
-            const categories = getData('categories');
             const container = document.getElementById('category-list');
-            
-            container.innerHTML = categories.map(c => `
+            container.innerHTML = appData.categories.map(c => `
                 <div class="reward-item" style="margin-bottom: 8px;">
                     <div class="reward-info">
                         <div class="reward-name">${c.icon} ${c.name}</div>
@@ -1492,53 +1329,49 @@
             `).join('');
         }
 
-        function addCategory() {
+        // 添加分类
+        async function addCategory() {
             const name = document.getElementById('new-category-name').value.trim();
             const icon = document.getElementById('new-category-icon').value.trim() || '🎯';
-            
+
             if (!name) {
                 alert('请输入分类名称');
                 return;
             }
-            
-            const categories = getData('categories');
-            categories.push({
+
+            appData.categories.push({
                 id: generateId(),
                 name,
                 icon
             });
-            
-            saveData('categories', categories);
+
+            await saveToCloud();
             document.getElementById('new-category-name').value = '';
             document.getElementById('new-category-icon').value = '🎯';
             renderCategoryList();
         }
 
-        function deleteCategory(categoryId) {
-            const categories = getData('categories');
-            if (categories.length <= 1) {
+        // 删除分类
+        async function deleteCategory(categoryId) {
+            if (appData.categories.length <= 1) {
                 alert('至少保留一个分类');
                 return;
             }
-            
-            const newCategories = categories.filter(c => c.id !== categoryId);
-            saveData('categories', newCategories);
-            
-            // 将该分类下的奖励移到第一个分类
-            const rewards = getData('rewards');
-            const firstCategoryId = newCategories[0].id;
-            rewards.forEach(r => {
+
+            appData.categories = appData.categories.filter(c => c.id !== categoryId);
+
+            const firstCategoryId = appData.categories[0].id;
+            appData.rewards.forEach(r => {
                 if (r.categoryId === categoryId) {
                     r.categoryId = firstCategoryId;
                 }
             });
-            saveData('rewards', rewards);
-            
+
+            await saveToCloud();
             renderCategoryList();
         }
 
-        // ==================== 手动调整 ====================
-        
+        // 显示调整积分模态框
         function showAdjustModal() {
             document.getElementById('adjust-type').value = 'add';
             document.getElementById('adjust-amount').value = '10';
@@ -1546,22 +1379,20 @@
             openModal('adjust-modal');
         }
 
-        function saveAdjust() {
+        // 保存调整
+        async function saveAdjust() {
             const type = document.getElementById('adjust-type').value;
             const amount = parseInt(document.getElementById('adjust-amount').value) || 0;
             const reason = document.getElementById('adjust-reason').value.trim() || (type === 'add' ? '手动增加' : '手动扣除');
-            
+
             if (amount <= 0) {
                 alert('请输入有效的积分数量');
                 return;
             }
-            
-            let score = getData('score');
-            const history = getData('history');
-            
+
             if (type === 'add') {
-                score += amount;
-                history.unshift({
+                appData.score += amount;
+                appData.history.unshift({
                     id: generateId(),
                     type: 'manual_add',
                     description: reason,
@@ -1569,8 +1400,8 @@
                     timestamp: Date.now()
                 });
             } else {
-                score -= amount;
-                history.unshift({
+                appData.score -= amount;
+                appData.history.unshift({
                     id: generateId(),
                     type: 'manual_subtract',
                     description: reason,
@@ -1578,66 +1409,55 @@
                     timestamp: Date.now()
                 });
             }
-            
-            saveData('score', score);
-            saveData('history', history);
-            
+
+            await saveToCloud();
             closeModal('adjust-modal');
             updateScoreDisplay();
             renderHistory();
         }
 
-        // ==================== 历史记录 ====================
-        
+        // 渲染历史记录
         function renderHistory() {
-            const history = getData('history');
             const container = document.getElementById('history-container');
             const emptyState = document.getElementById('history-empty');
-            
-            if (history.length === 0) {
+
+            if (appData.history.length === 0) {
                 container.innerHTML = '';
                 emptyState.style.display = 'block';
                 document.getElementById('total-income').textContent = '0';
                 document.getElementById('total-expense').textContent = '0';
                 return;
             }
-            
+
             emptyState.style.display = 'none';
-            
-            // 计算总收入和总支出
+
             let totalIncome = 0;
             let totalExpense = 0;
-            history.forEach(item => {
-                if (item.amount > 0) {
-                    totalIncome += item.amount;
-                } else {
-                    totalExpense += Math.abs(item.amount);
-                }
+            appData.history.forEach(item => {
+                if (item.amount > 0) totalIncome += item.amount;
+                else totalExpense += Math.abs(item.amount);
             });
-            
+
             document.getElementById('total-income').textContent = totalIncome;
             document.getElementById('total-expense').textContent = totalExpense;
-            
-            // 按日期分组
+
             const grouped = {};
-            history.forEach(item => {
+            appData.history.forEach(item => {
                 const date = new Date(item.timestamp).toISOString().split('T')[0];
-                if (!grouped[date]) {
-                    grouped[date] = [];
-                }
+                if (!grouped[date]) grouped[date] = [];
                 grouped[date].push(item);
             });
-            
+
             container.innerHTML = Object.keys(grouped).map(date => {
                 const items = grouped[date];
                 const dateObj = new Date(date);
                 const today = getTodayStr();
                 const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-                
+
                 let dateLabel = dateObj.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric' });
                 if (date === today) dateLabel = '今天';
                 else if (date === yesterday) dateLabel = '昨天';
-                
+
                 return `
                     <div class="date-group">
                         <div class="date-header">${dateLabel}</div>
@@ -1660,14 +1480,13 @@
             }).join('');
         }
 
-        // ==================== 通用功能 ====================
-        
+        // 更新积分显示
         function updateScoreDisplay() {
-            const score = getData('score');
-            document.getElementById('total-score').textContent = score;
-            document.getElementById('available-score').textContent = score;
+            document.getElementById('total-score').textContent = appData.score;
+            document.getElementById('available-score').textContent = appData.score;
         }
 
+        // 模态框操作
         function openModal(modalId) {
             document.getElementById(modalId).classList.add('active');
         }
@@ -1687,13 +1506,21 @@
             openModal('confirm-modal');
         }
 
-        // ==================== 初始化 ====================
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            initData();
-            updateScoreDisplay();
-            renderTodayTasks();
-        });
+        // 隐藏加载界面
+        function hideLoading() {
+            document.getElementById('loading-overlay').style.display = 'none';
+        }
+
+        // 初始化
+        async function init() {
+            await loadFromCloud();
+            listenToChanges();
+            refreshAllPages();
+            hideLoading();
+        }
+
+        // 启动应用
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
