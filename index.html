@@ -813,6 +813,8 @@
 
         // 同步状态
         let isSyncing = false;
+        let isOnline = true;
+        const STORAGE_KEY = 'scoreAppData';
 
         // 更新同步状态显示
         function updateSyncStatus(status, text) {
@@ -822,52 +824,107 @@
             textEl.textContent = text;
         }
 
-        // 保存数据到 Firebase
+        // 保存到本地存储
+        function saveToLocal() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+            } catch (e) {
+                console.error('本地保存失败:', e);
+            }
+        }
+
+        // 从本地存储加载
+        function loadFromLocal() {
+            try {
+                const data = localStorage.getItem(STORAGE_KEY);
+                if (data) {
+                    appData = { ...appData, ...JSON.parse(data) };
+                    return true;
+                }
+            } catch (e) {
+                console.error('本地加载失败:', e);
+            }
+            return false;
+        }
+
+        // 带超时的 Promise
+        function withTimeout(promise, ms) {
+            return Promise.race([
+                promise,
+                new Promise((_, reject) => setTimeout(() => reject(new Error('超时')), ms))
+            ]);
+        }
+
+        // 保存数据到 Firebase（带超时和离线回退）
         async function saveToCloud() {
+            // 先保存到本地
+            saveToLocal();
+            
             if (isSyncing) return;
             isSyncing = true;
             updateSyncStatus('syncing', '同步中...');
 
             try {
-                await db.collection('scoreApp').doc(DATA_DOC_ID).set(appData);
+                await withTimeout(db.collection('scoreApp').doc(DATA_DOC_ID).set(appData), 5000);
+                isOnline = true;
                 updateSyncStatus('synced', '已同步');
             } catch (error) {
                 console.error('保存失败:', error);
-                updateSyncStatus('offline', '同步失败');
+                isOnline = false;
+                updateSyncStatus('offline', '离线模式');
             }
 
             isSyncing = false;
         }
 
-        // 从 Firebase 加载数据
+        // 从 Firebase 加载数据（带超时和离线回退）
         async function loadFromCloud() {
+            // 先尝试从本地加载
+            const hasLocal = loadFromLocal();
+            
             try {
-                const doc = await db.collection('scoreApp').doc(DATA_DOC_ID).get();
+                const doc = await withTimeout(db.collection('scoreApp').doc(DATA_DOC_ID).get(), 5000);
                 if (doc.exists) {
                     appData = { ...appData, ...doc.data() };
-                } else {
+                    saveToLocal(); // 同步到本地
+                } else if (!hasLocal) {
                     // 首次使用，创建默认数据
                     await saveToCloud();
                 }
+                isOnline = true;
                 updateSyncStatus('synced', '已同步');
             } catch (error) {
                 console.error('加载失败:', error);
-                updateSyncStatus('offline', '离线模式');
+                isOnline = false;
+                if (hasLocal) {
+                    updateSyncStatus('offline', '离线模式');
+                } else {
+                    updateSyncStatus('offline', '离线模式');
+                }
             }
         }
 
         // 监听实时更新
         function listenToChanges() {
-            db.collection('scoreApp').doc(DATA_DOC_ID).onSnapshot((doc) => {
-                if (doc.exists && !isSyncing) {
-                    appData = { ...appData, ...doc.data() };
-                    refreshAllPages();
-                    updateSyncStatus('synced', '已同步');
-                }
-            }, (error) => {
-                console.error('监听失败:', error);
-                updateSyncStatus('offline', '连接断开');
-            });
+            try {
+                db.collection('scoreApp').doc(DATA_DOC_ID).onSnapshot((doc) => {
+                    if (doc.exists && !isSyncing) {
+                        appData = { ...appData, ...doc.data() };
+                        saveToLocal(); // 同步到本地
+                        refreshAllPages();
+                        isOnline = true;
+                        updateSyncStatus('synced', '已同步');
+                    }
+                }, (error) => {
+                    console.error('监听失败:', error);
+                    isOnline = false;
+                    updateSyncStatus('offline', '连接断开');
+                });
+            } catch (error) {
+                console.error('监听设置失败:', error);
+                isOnline = false;
+                updateSyncStatus('offline', '离线模式');
+            }
         }
 
         // 刷新所有页面
