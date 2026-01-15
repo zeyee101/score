@@ -1107,7 +1107,7 @@
         }
 
         // 切换任务完成状态
-        async function toggleTaskCompletion(taskId) {
+        function toggleTaskCompletion(taskId) {
             const task = appData.tasks.find(t => t.id === taskId);
             if (!task) return;
 
@@ -1140,10 +1140,11 @@
                 });
             }
 
-            await saveToCloud();
+            // 先更新UI，然后异步保存到云端
             renderTodayTasks();
             renderTasksList();
             updateScoreDisplay();
+            saveToCloud(); // 不等待，异步执行
         }
 
         // 显示添加任务模态框
@@ -1172,7 +1173,7 @@
         }
 
         // 保存任务
-        async function saveTask() {
+        function saveTask() {
             const editId = document.getElementById('task-edit-id').value;
             const name = document.getElementById('task-name').value.trim();
             const score = parseInt(document.getElementById('task-score').value) || 0;
@@ -1200,19 +1201,20 @@
                 });
             }
 
-            await saveToCloud();
+            // 先关闭模态框和更新UI，然后异步保存到云端
             closeModal('task-modal');
             renderTodayTasks();
             renderTasksList();
+            saveToCloud(); // 不等待，异步执行
         }
 
         // 删除任务
         function deleteTask(taskId) {
-            showConfirm('🗑️', '确认删除此任务？', '删除后无法恢复', async () => {
+            showConfirm('🗑️', '确认删除此任务？', '删除后无法恢复', () => {
                 appData.tasks = appData.tasks.filter(t => t.id !== taskId);
-                await saveToCloud();
                 renderTodayTasks();
                 renderTasksList();
+                saveToCloud(); // 不等待，异步执行
             });
         }
 
@@ -1301,7 +1303,7 @@
         }
 
         // 保存奖励
-        async function saveReward() {
+        function saveReward() {
             const editId = document.getElementById('reward-edit-id').value;
             const name = document.getElementById('reward-name').value.trim();
             const cost = parseInt(document.getElementById('reward-cost').value) || 0;
@@ -1326,17 +1328,18 @@
                 });
             }
 
-            await saveToCloud();
+            // 先关闭模态框和更新UI，然后异步保存到云端
             closeModal('reward-modal');
             renderRewards();
+            saveToCloud(); // 不等待，异步执行
         }
 
         // 删除奖励
         function deleteReward(rewardId) {
-            showConfirm('🗑️', '确认删除此奖励？', '删除后无法恢复', async () => {
+            showConfirm('🗑️', '确认删除此奖励？', '删除后无法恢复', () => {
                 appData.rewards = appData.rewards.filter(r => r.id !== rewardId);
-                await saveToCloud();
                 renderRewards();
+                saveToCloud(); // 不等待，异步执行
             });
         }
 
@@ -1350,7 +1353,7 @@
                 return;
             }
 
-            showConfirm('🎁', `确认兑换「${reward.name}」？`, `将扣除 ${reward.cost} 积分`, async () => {
+            showConfirm('🎁', `确认兑换「${reward.name}」？`, `将扣除 ${reward.cost} 积分`, () => {
                 appData.score -= reward.cost;
                 appData.history.unshift({
                     id: generateId(),
@@ -1360,10 +1363,10 @@
                     timestamp: Date.now()
                 });
 
-                await saveToCloud();
                 renderRewards();
                 updateScoreDisplay();
                 alert('兑换成功！🎉');
+                saveToCloud(); // 不等待，异步执行
             });
         }
 
@@ -1387,7 +1390,7 @@
         }
 
         // 添加分类
-        async function addCategory() {
+        function addCategory() {
             const name = document.getElementById('new-category-name').value.trim();
             const icon = document.getElementById('new-category-icon').value.trim() || '🎯';
 
@@ -1402,14 +1405,14 @@
                 icon
             });
 
-            await saveToCloud();
             document.getElementById('new-category-name').value = '';
             document.getElementById('new-category-icon').value = '🎯';
             renderCategoryList();
+            saveToCloud(); // 不等待，异步执行
         }
 
         // 删除分类
-        async function deleteCategory(categoryId) {
+        function deleteCategory(categoryId) {
             if (appData.categories.length <= 1) {
                 alert('至少保留一个分类');
                 return;
@@ -1424,8 +1427,8 @@
                 }
             });
 
-            await saveToCloud();
             renderCategoryList();
+            saveToCloud(); // 不等待，异步执行
         }
 
         // 显示调整积分模态框
@@ -1437,7 +1440,7 @@
         }
 
         // 保存调整
-        async function saveAdjust() {
+        function saveAdjust() {
             const type = document.getElementById('adjust-type').value;
             const amount = parseInt(document.getElementById('adjust-amount').value) || 0;
             const reason = document.getElementById('adjust-reason').value.trim() || (type === 'add' ? '手动增加' : '手动扣除');
@@ -1467,10 +1470,11 @@
                 });
             }
 
-            await saveToCloud();
+            // 先关闭模态框和更新UI，然后异步保存到云端
             closeModal('adjust-modal');
             updateScoreDisplay();
             renderHistory();
+            saveToCloud(); // 不等待，异步执行
         }
 
         // 渲染历史记录
